@@ -13,6 +13,7 @@ app.use(
       'http://localhost:5173',
       'http://localhost:5000',
       'https://warclub-27642.web.app',
+      'https://server-pi-opal-58.vercel.app',
     ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
