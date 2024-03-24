@@ -41,6 +41,7 @@ async function run() {
 
     // users, admin and moderator related
     const allGamesCollection = client.db('gamesCollection').collection('games');
+    const timerGameCollection = client.db('gamesCollection').collection('timerGame');
 
     app.get('/games', async (req, res) => {
       const result = await allGamesCollection.find().toArray();
