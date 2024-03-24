@@ -114,6 +114,11 @@ async function run() {
       res.send(result);
     });
 
+      app.get('/timerGame', async (req, res) => {
+        const result = await timerGameCollection.find().toArray();
+        res.send(result);
+      });
+
     app.post('/timerGame', async (req, res) => {
       try {
         const insertedId = await addNewGameToTimerCollection(
