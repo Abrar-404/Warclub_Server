@@ -36,9 +36,10 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-
     const allGamesCollection = client.db('gamesCollection').collection('games');
-    const timerGameCollection = client.db('gamesCollection').collection('timerGame');
+    const timerGameCollection = client
+      .db('gamesCollection')
+      .collection('timerGame');
 
     app.get('/games', async (req, res) => {
       const result = await allGamesCollection.find().toArray();
@@ -46,7 +47,7 @@ async function run() {
     });
 
     app.get('/timerGame', async (req, res) => {
-      const result = await timerGameCollection.find().toArray();
+      const result = await timerGameCollection.findOne();
       res.send(result);
     });
 
@@ -66,6 +67,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Port is running on: ${port}`);
 });
-
-
-
