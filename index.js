@@ -129,7 +129,7 @@ async function run() {
         const gameData = await addDataToUI();
         if (gameData) {
           // Send data to the UI
-          io.emit('addGameData', gameData);
+          io.emit('timerGame', gameData);
           // Reset the timer
           clearInterval(timer);
           startTimer();
