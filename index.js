@@ -110,9 +110,11 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const allGamesCollection = client.db('gamesCollection').collection('games');
+
     const newGamesCollection = client
       .db('gamesCollection')
       .collection('addNewGame');
+    
     const timerGameCollection = client
       .db('gamesCollection')
       .collection('timerGame');
