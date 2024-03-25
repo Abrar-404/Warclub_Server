@@ -45,17 +45,6 @@ async function run() {
       res.send(result);
     });
 
-    app.get('/timerGames', async (req, res) => {
-      try {
-        const result = await timerGameCollection.find().toArray();
-        res.send(result);
-      } catch (error) {
-        console.error('Error fetching timer games:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      }
-    });
-
-
     await client.db('admin').command({ ping: 1 });
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!'
