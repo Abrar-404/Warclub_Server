@@ -72,11 +72,9 @@ require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cookieParser = require('cookie-parser');
 const app = express();
-const socketIo = require('socket.io');
-const io = socketIo(server);
 const port = process.env.PORT || 5000;
 
-// middleware
+// Middleware
 app.use(
   cors({
     origin: [
@@ -94,8 +92,10 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+// MongoDB URI
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.eted0lc.mongodb.net/?retryWrites=true&w=majority`;
 
+// Connect to MongoDB
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -113,28 +113,20 @@ async function run() {
       .db('gamesCollection')
       .collection('timerGame');
 
-    // Function to add data from MongoDB to UI
-    async function addDataToUI() {
-      const data = await timerGameCollection.findOneAndDelete({});
-      if (data) {
-        return data;
-      }
-      return null;
+    // Function to fetch and delete a single document from timerGameCollection
+    async function fetchAndDeleteGameData() {
+      const gameData = await timerGameCollection.findOneAndDelete({});
+      return gameData.value;
     }
 
-    // Initialize timer
-    let timer = null;
-
-    // Function to start the timer
+    // Function to start the timer and add new data to UI
     function startTimer() {
-      timer = setInterval(async () => {
-        const gameData = await addDataToUI();
-        if (gameData) {
-          // Send data to the UI
-          io.emit('timerGame', gameData);
-          // Reset the timer
-          clearInterval(timer);
-          startTimer();
+      setInterval(async () => {
+        const newGameData = await fetchAndDeleteGameData();
+        if (newGameData) {
+          // Emit new game data to clients
+          io.emit('newGameData', newGameData);
+          console.log('New game data added:', newGameData);
         }
       }, 5000); // Adjust the interval as needed
     }
@@ -156,10 +148,13 @@ async function run() {
 }
 run().catch(console.dir);
 
+// Root endpoint
 app.get('/', (req, res) => {
   res.send('Gaming is on');
 });
 
+// Start listening on the specified port
 app.listen(port, () => {
   console.log(`Port is running on: ${port}`);
 });
+
