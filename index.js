@@ -72,6 +72,8 @@ require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cookieParser = require('cookie-parser');
 const app = express();
+const socketIo = require('socket.io');
+const io = socketIo(server);
 const port = process.env.PORT || 5000;
 
 // middleware
