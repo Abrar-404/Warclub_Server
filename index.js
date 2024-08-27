@@ -69,8 +69,6 @@
 //   console.log(`Port is running on: ${port}`);
 // });
 
-
-
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -114,10 +112,12 @@ async function run() {
     const newGamesCollection = client
       .db('gamesCollection')
       .collection('addNewGame');
-    
+
     const timerGameCollection = client
       .db('gamesCollection')
       .collection('timerGame');
+
+    const blogsCollection = client.db('gamesCollection').collection('blogs');
 
     app.get('/games', async (req, res) => {
       const result = await allGamesCollection.find().toArray();
@@ -129,17 +129,20 @@ async function run() {
       res.send(result);
     });
 
+    app.get('/blogs', async (req, res) => {
+      const result = await blogsCollection.findOne();
+      res.send(result);
+    });
+
     app.post('/addGame', async (req, res) => {
       try {
         const { img, name, review, fee } = req.body;
         const newGame = { img, name, review, fee };
         const result = await newGamesCollection.insertOne(newGame);
-        res
-          .status(201)
-          .json({
-            message: 'Game added successfully',
-            gameId: result.insertedId,
-          });
+        res.status(201).json({
+          message: 'Game added successfully',
+          gameId: result.insertedId,
+        });
       } catch (error) {
         console.error('Error adding new game:', error);
         res.status(500).json({ message: 'Failed to add new game' });
