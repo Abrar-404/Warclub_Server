@@ -130,7 +130,7 @@ async function run() {
     });
 
     app.get('/blogs', async (req, res) => {
-      const result = await blogsCollection.findOne();
+      const result = await blogsCollection.find().toArray();
       res.send(result);
     });
 
