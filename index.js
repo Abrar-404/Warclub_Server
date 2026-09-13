@@ -30,6 +30,7 @@ app.use(
       'http://127.0.0.1:5001',
       'https://warclub-27642.web.app',
       'https://warclub-27642.firebaseapp.com',
+      'https://warclub-client.vercel.app',
       'https://server-sigma-ten-76.vercel.app',
       'https://server-pi-opal-58.vercel.app',
     ],
