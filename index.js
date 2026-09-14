@@ -158,8 +158,14 @@ app.get('/users', async (req, res) => {
 
 app.get('/games', async (req, res) => {
   try {
-    const result = await allGamesCollection.find().toArray();
-    res.send(result);
+    const defaultGames = await allGamesCollection.find().toArray();
+    let addedGames = [];
+    try {
+      addedGames = await newGamesCollection.find().toArray();
+    } catch (e) {
+      console.warn('Could not fetch newGamesCollection:', e.message);
+    }
+    res.send([...addedGames.reverse(), ...defaultGames]);
   } catch (error) {
     console.error('Error fetching games:', error);
     res.status(500).json({ error: 'Failed to fetch games' });
